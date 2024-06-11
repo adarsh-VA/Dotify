@@ -25,7 +25,6 @@ const loginUser = async (req, res) => {
         return res
         .status(200)
         .cookie('accessToken', token, {
-          httpOnly: true,        // Makes the cookie inaccessible to client-side JavaScript
           secure: true,
           maxAge: 5 * 24 * 60 * 60 * 1000 // 5 days in milliseconds
         })
