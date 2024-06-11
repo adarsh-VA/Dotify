@@ -40,7 +40,7 @@ app.options('*', (req, res) => {
 
 
 // routes 
-app.use('',(req,res)=>{
+app.use('/test',(req,res)=>{
   return res.status(200).json({message:"Application Running Sucessfully."})
 });
 app.use('/api/users', userRouter);
