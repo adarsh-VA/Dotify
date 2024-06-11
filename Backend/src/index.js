@@ -36,6 +36,7 @@ app.use('/api/playlists', playlistRouter);
 app.use('/api/artists', artistRouter);
 app.use('/api/songs', songRouter);
 
+app.options('*', cors(corsOptions));
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
