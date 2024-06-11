@@ -24,8 +24,13 @@ const loginUser = async (req, res) => {
 
         return res
         .status(200)
-        .cookie("accessToken", token, { secure: true})
-        .json({ currentUser,token });
+        .cookie('accessToken', token, {
+          httpOnly: true,        // Makes the cookie inaccessible to client-side JavaScript
+          secure: process.env.NODE_ENV === 'production', // Only set secure in production
+          sameSite: 'Lax',       // Prevents CSRF attacks
+          maxAge: 5 * 24 * 60 * 60 * 1000 // 5 days in milliseconds
+        })
+        .json({ currentUser, token });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -46,8 +51,13 @@ const registerUser = async (req, res) => {
 
         return res
         .status(200)
-        .cookie("accessToken", token, { secure: true})
-        .json({ user,token });
+        .cookie('accessToken', token, {
+          httpOnly: true,        // Makes the cookie inaccessible to client-side JavaScript
+          secure: process.env.NODE_ENV === 'production', // Only set secure in production
+          sameSite: 'Lax',       // Prevents CSRF attacks
+          maxAge: 5 * 24 * 60 * 60 * 1000 // 5 days in milliseconds
+        })
+        .json({ currentUser, token });
         } catch (error) {
         return res.status(500).json({ error: error.message });
     }
