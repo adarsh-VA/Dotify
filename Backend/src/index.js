@@ -23,7 +23,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 // MongoDB Connection
-mongoose.connect('mongodb+srv://VA:08112000@dotify.ntcsyop.mongodb.net/?retryWrites=true&w=majority&appName=Dotify');
+mongoose.connect(process.env.MONGODB_URI);
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
