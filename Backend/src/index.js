@@ -30,18 +30,9 @@ const db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-app.options('*', (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://dotify-va.vercel.app');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.sendStatus(200);
-});
-
-
 // routes 
-app.use('/test',(req,res)=>{
-  return res.status(200).json({message:"Application Running Sucessfully."})
+app.get('/', (req, res) => {
+  res.send('Hello dotify application running sucessfully!!');
 });
 app.use('/api/users', userRouter);
 app.use('/api/playlists', playlistRouter);
