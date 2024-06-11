@@ -1,0 +1,47 @@
+.login-search li {
+  padding: 15px;
+}
+
+.login-search li:hover {
+  color: aliceblue;
+  transition: 0.4s;
+}
+
+.login-search li a span {
+  margin-left: 15px;
+  font-weight: bold;
+}
+
+.login-search li a i {
+  font-size: large;
+}
+
+.active {
+  color: aliceblue !important;
+}
+
+.div-color {
+  background-color: #121212;
+  border-radius: 10px;
+}
+
+.links li:hover{
+  color: white;
+  text-decoration: underline;
+}
+
+.user-links a{
+  padding: 7px;
+}
+
+
+/* Hide the default browser scrollbar */
+.library-tab-inner::-webkit-scrollbar {
+  width: 0;
+  display: none;
+}
+
+.playlists-Tab::-webkit-scrollbar{
+  width: 0;
+  display: none;
+}
