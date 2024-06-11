@@ -26,8 +26,7 @@ const loginUser = async (req, res) => {
         .status(200)
         .cookie('accessToken', token, {
           httpOnly: true,        // Makes the cookie inaccessible to client-side JavaScript
-          secure: process.env.NODE_ENV === 'production', // Only set secure in production
-          sameSite: 'Lax',       // Prevents CSRF attacks
+          secure: true,
           maxAge: 5 * 24 * 60 * 60 * 1000 // 5 days in milliseconds
         })
         .json({ currentUser, token });
