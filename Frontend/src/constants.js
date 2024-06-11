@@ -1,4 +1,4 @@
-const backendUrl = 'https://dotifyBackend.vercel.app/api';
+const backendUrl = 'https://dotify-backend.vercel.app/api';
 const backendImageUrl = 'http://localhost:8001/images';
 const backendSongUrl = 'http://localhost:8001/mp3';
 
