@@ -31,9 +31,10 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.options('*', (req, res) => {
-  res.set('Access-Control-Allow-Origin', 'https://dotify-va.vercel.app');
-  res.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Origin', 'https://dotify-va.vercel.app');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.sendStatus(200);
 });
 
@@ -43,8 +44,6 @@ app.use('/api/users', userRouter);
 app.use('/api/playlists', playlistRouter);
 app.use('/api/artists', artistRouter);
 app.use('/api/songs', songRouter);
-
-app.options('*', cors(corsOptions));
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
