@@ -9,8 +9,6 @@ const playlistRouter = require('./routes/playlist.route');
 const artistRouter = require('./routes/artist.route');
 const songRouter = require('./routes/song.route');
 
-
-
 const app = express();
 const PORT = process.env.PORT || 8001;
 
@@ -25,14 +23,16 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI);
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 const db = mongoose.connection;
-
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-// routes 
+// Routes
 app.get('/', (req, res) => {
-  res.send('Hello dotify application running sucessfully!!');
+  res.send('Hello dotify application running successfully!!');
 });
 app.use('/api/users', userRouter);
 app.use('/api/playlists', playlistRouter);
@@ -40,5 +40,5 @@ app.use('/api/artists', artistRouter);
 app.use('/api/songs', songRouter);
 
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-  });
+  console.log(`Server is running on port ${PORT}`);
+});
