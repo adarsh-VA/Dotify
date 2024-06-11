@@ -40,6 +40,9 @@ app.options('*', (req, res) => {
 
 
 // routes 
+app.use('',(req,res)=>{
+  return res.status(200).json({message:"Application Running Sucessfully."})
+});
 app.use('/api/users', userRouter);
 app.use('/api/playlists', playlistRouter);
 app.use('/api/artists', artistRouter);
