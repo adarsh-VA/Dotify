@@ -30,6 +30,14 @@ const db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
+app.options('*', (req, res) => {
+  res.set('Access-Control-Allow-Origin', 'https://dotify-va.vercel.app');
+  res.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.sendStatus(200);
+});
+
+
 // routes 
 app.use('/api/users', userRouter);
 app.use('/api/playlists', playlistRouter);
