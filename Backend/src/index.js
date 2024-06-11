@@ -13,7 +13,7 @@ const app = express();
 const PORT = process.env.PORT || 8001;
 
 const corsOptions = {
-  origin: 'http://localhost:3000', // Your frontend URL
+  origin: 'https://dotify-va.vercel.app', // Your frontend URL
   credentials: true, // Enable credentials (cookies)
 };
 
