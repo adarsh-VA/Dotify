@@ -9,6 +9,7 @@ import { setUser, setToken, setPlaylists } from '../store/reducers/authSlice';
 import { setPlaylistId, setPlayerSongs, setIsPlaying, setSongId } from '../store/reducers/playerSlice';
 import { useLocation } from 'react-router-dom';
 import { setIsNotificationVisible, setNotification } from '../store/reducers/notificationSlice';
+import Cookies from 'js-cookie';
 
 export default function Main() {
 
@@ -44,6 +45,7 @@ export default function Main() {
             dispatch(setSongId(null));
             dispatch(setUser(null));
             dispatch(setToken(null));
+            Cookies.remove('accessToken')
             navigate('/');
         })
     };

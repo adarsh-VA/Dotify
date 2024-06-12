@@ -24,11 +24,11 @@ const loginUser = async (req, res) => {
 
         return res
         .status(200)
-        .cookie('accessToken', token, {
-          secure: true,
-          maxAge: 5 * 24 * 60 * 60 * 1000 // 5 days in milliseconds
-        })
         .json({ currentUser, token });
+        // .cookie('accessToken', token, {
+        //   secure: true,
+        //   maxAge: 5 * 24 * 60 * 60 * 1000 // 5 days in milliseconds
+        // })
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -49,13 +49,13 @@ const registerUser = async (req, res) => {
 
         return res
         .status(200)
-        .cookie('accessToken', token, {
-          httpOnly: true,        // Makes the cookie inaccessible to client-side JavaScript
-          secure: process.env.NODE_ENV === 'production', // Only set secure in production
-          sameSite: 'Lax',       // Prevents CSRF attacks
-          maxAge: 5 * 24 * 60 * 60 * 1000 // 5 days in milliseconds
-        })
         .json({ currentUser, token });
+        // .cookie('accessToken', token, {
+        //   httpOnly: true,        // Makes the cookie inaccessible to client-side JavaScript
+        //   secure: process.env.NODE_ENV === 'production', // Only set secure in production
+        //   sameSite: 'Lax',       // Prevents CSRF attacks
+        //   maxAge: 5 * 24 * 60 * 60 * 1000 // 5 days in milliseconds
+        // })
         } catch (error) {
         return res.status(500).json({ error: error.message });
     }
@@ -82,8 +82,9 @@ const registerAdmin = async (req, res) => {
 
 const logoutUser = async (req, res) => {
     return res
-    .clearCookie('accessToken')
+    .status(200)
     .json({ message: 'Logout successfull' });
+    // .clearCookie('accessToken')
 }
 
 const getCurrentUser = async (req, res) => {

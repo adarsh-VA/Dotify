@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { backendUrl } from '../constants';
 import { useDispatch } from 'react-redux';
 import { setUser, setToken } from '../store/reducers/authSlice';
+import Cookies from 'js-cookie';
 
 export default function Register() {
 
@@ -29,6 +30,7 @@ export default function Register() {
         ).then((res) => {
             dispatch(setUser(res.data.user));
             dispatch(setToken(res.data.token));
+            Cookies.set('accessToken',res.data.token, { expires: 5 });
             navigate('/');
         })
             .catch((error) => {

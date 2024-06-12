@@ -22,7 +22,7 @@ export default function Login() {
             const data = response.data;
             dispatch(setUser(data.currentUser));
             dispatch(setToken(data.token));
-            Cookies.set('testingVal', 'heythisistestingvalueofthecookie', { expires: 7 });
+            Cookies.set('accessToken',data.token, { expires: 5 });
             navigate('/');
         } catch (error) {
             if (error.response && error.response.status === 401) {
