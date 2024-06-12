@@ -5,6 +5,8 @@ import { setPlaylistId, setArtistId, setPlayerSongs, setIsPlaying, setSongId, re
 import axios from 'axios';
 import { backendUrl, firebaseImgUrl } from '../constants';
 import { removeUserPlaylist, setPlaylists } from '../store/reducers/authSlice';
+import { setLoading } from '../store/reducers/notificationSlice';
+import Loading from './Loading';
 
 export default function PlaylistView() {
 
@@ -25,6 +27,7 @@ export default function PlaylistView() {
     const [playlistImage, setPlaylistImage] = useState(null);
     const [isUploadPreview, setIsUploadPreview] = useState(false);
     const navigate = useNavigate();
+    const isLoading = useSelector((state) => state.notification.loading);
 
     function getAverageRGB(imgEl) {
         var blockSize = 100, // only visit every 5 pixels
@@ -71,6 +74,7 @@ export default function PlaylistView() {
     }
 
     useEffect(() => {
+        dispatch(setLoading(true));
         axios.get(`${backendUrl}/playlists/${playlistId}`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
@@ -78,6 +82,7 @@ export default function PlaylistView() {
         })
             .then((res) => {
                 setPlaylist(res.data);
+                dispatch(setLoading(false));
             })
     }, [playlistId]);
 
@@ -103,6 +108,7 @@ export default function PlaylistView() {
 
     const addPlaylistToUser = () => {
         if (user) {
+            dispatch(setLoading(true));
             axios.put(`${backendUrl}/users/addPlaylist/${user._id}`,
                 {
                     playlistId
@@ -114,6 +120,7 @@ export default function PlaylistView() {
                 })
                 .then((res) => {
                     dispatch(setPlaylists(res.data.playlists));
+                    dispatch(setLoading(false));
                 });
         }
         else {
@@ -122,6 +129,7 @@ export default function PlaylistView() {
     }
 
     const removePlaylistFromUser = () => {
+        dispatch(setLoading(true));
         axios.put(`${backendUrl}/users/removePlaylist/${user._id}`,
             {
                 playlistId
@@ -133,6 +141,7 @@ export default function PlaylistView() {
             })
             .then(() => {
                 dispatch(removeUserPlaylist(playlistId));
+                dispatch(setLoading(false));
             });
     }
 
@@ -284,6 +293,10 @@ export default function PlaylistView() {
     const gradientStyle = {
         backgroundImage: `linear-gradient(to bottom, ${rgb}, 225px, transparent 550px)`,
     };
+
+    if (isLoading) {
+        return (<Loading />);
+    }
 
     return (
         <div className='relative' style={playlist?.image || playlist?.songs?.length > 0 ? gradientStyle : { background: 'linear-gradient(to bottom, rgb(71,71,71) 225px, transparent 550px)' }}>

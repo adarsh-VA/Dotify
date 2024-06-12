@@ -4,8 +4,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setPlaylistId, setArtistId, setPlayerSongs, setIsPlaying, setSongId } from '../store/reducers/playerSlice';
 import axios from 'axios';
 import { backendUrl, firebaseImgUrl } from '../constants';
-import { setIsNotificationVisible, setNotification } from '../store/reducers/notificationSlice';
+import { setIsNotificationVisible, setLoading, setNotification } from '../store/reducers/notificationSlice';
 import { setPlaylists } from '../store/reducers/authSlice';
+import Loading from './Loading';
 
 export default function SongView() {
 
@@ -21,6 +22,7 @@ export default function SongView() {
     const addPlaylistRef = useRef(null);
     const userPlaylists = useSelector((state) => state.user.playlists);
     const navigate = useNavigate();
+    const isLoading = useSelector((state) => state.notification.loading);
 
     function getAverageRGB(imgEl) {
         var blockSize = 100, // only visit every 5 pixels
@@ -76,7 +78,7 @@ export default function SongView() {
         document.addEventListener('click', handleClickOutside);
 
         if (user) {
-
+            dispatch(setLoading(true));
             axios.get(`${backendUrl}/songs/${songId}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
@@ -84,9 +86,10 @@ export default function SongView() {
             })
                 .then((res) => {
                     setSong(res.data);
+                    dispatch(setLoading(false));
                 })
         }
-        else{
+        else {
             navigate('/login');
         }
 
@@ -166,6 +169,10 @@ export default function SongView() {
     const gradientStyle = {
         backgroundImage: `linear-gradient(to bottom, ${rgb}, 225px, transparent 550px)`,
     };
+
+    if (isLoading) {
+        return (<Loading />);
+    }
 
     return (
         <div className='relative' style={gradientStyle}>

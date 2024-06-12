@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState={
     notification:null,
-    isNotificationVisible:false
+    isNotificationVisible:false,
+    loading:false
 }
 
 const notificationSlice = createSlice({
@@ -15,9 +16,12 @@ const notificationSlice = createSlice({
         setIsNotificationVisible:(state,action) => {
             state.isNotificationVisible = action.payload;
         },
+        setLoading:(state,action) => {
+            state.loading = action.payload;
+        }
     }
 })
 
 export default notificationSlice.reducer;
 
-export const {setNotification,setIsNotificationVisible} = notificationSlice.actions;
+export const {setNotification,setIsNotificationVisible,setLoading} = notificationSlice.actions;

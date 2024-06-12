@@ -2,9 +2,10 @@ import axios from 'axios';
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { backendUrl } from '../constants';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setUser, setToken } from '../store/reducers/authSlice';
 import Cookies from 'js-cookie';
+import { setLoading } from '../store/reducers/notificationSlice';
 
 export default function Login() {
 
@@ -13,16 +14,21 @@ export default function Login() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [error, setError] = useState(null);
+    const isLoading = useSelector((state) => state.notification.loading);
 
 
-    const login = async (e) =>{
-        e.preventDefault();
+    const login = () => {
         try {
-            const response = await axios.post(`${backendUrl}/users/login`, { email, password }, { withCredentials: true });
-            const data = response.data;
-            dispatch(setUser(data.currentUser));
-            dispatch(setToken(data.token));
-            Cookies.set('accessToken',data.token, { expires: 5 });
+            dispatch(setLoading(true));
+            axios.post(`${backendUrl}/users/login`, { email, password }, { withCredentials: true })
+                .then((response) => {
+                    const data = response.data;
+                    dispatch(setUser(data.currentUser));
+                    dispatch(setToken(data.token));
+                    Cookies.set('accessToken', data.token, { expires: 5 });
+                    dispatch(setLoading(false));
+                });
+
             navigate('/');
         } catch (error) {
             if (error.response && error.response.status === 401) {
@@ -32,6 +38,7 @@ export default function Login() {
             }
         }
     };
+
 
     return (
         <div className='flex flex-col h-screen'>
@@ -47,11 +54,11 @@ export default function Login() {
                             <div className='space-y-4'>
                                 <div className='flex flex-col space-y-1'>
                                     <label htmlFor="email">Email</label>
-                                    <input type="text" onChange={(e)=>setEmail(e.target.value)} placeholder='Email' id="email" name='email'  className='bg-transparent text-white ring-1 ring-neutral-500 rounded-sm p-2 hover:ring-white transition' />
+                                    <input type="text" onChange={(e) => setEmail(e.target.value)} placeholder='Email' id="email" name='email' className='bg-transparent text-white ring-1 ring-neutral-500 rounded-sm p-2 hover:ring-white transition' />
                                 </div>
                                 <div className='flex flex-col space-y-1'>
                                     <label htmlFor="password" >Password</label>
-                                    <input type="password" onChange={(e)=>setPassword(e.target.value)} id="password" placeholder='Password' name='password' className='bg-transparent text-white ring-1 ring-neutral-500 rounded-sm p-2 hover:ring-white transition' />
+                                    <input type="password" onChange={(e) => setPassword(e.target.value)} id="password" placeholder='Password' name='password' className='bg-transparent text-white ring-1 ring-neutral-500 rounded-sm p-2 hover:ring-white transition' />
                                 </div>
                                 {error &&
                                     <div className="bg-red-100 border border-red-400 flex text-red-700 px-4 py-2 items-center rounded" role="alert">
@@ -63,7 +70,10 @@ export default function Login() {
                                     </div>
                                 }
                             </div>
-                            <button type='submit' onClick={(e)=>login(e)} className='bg-green-500 py-3 px-10 w-full mt-10 text-black font-semibold rounded-3xl hover:scale-110 hover:font-bold'>Log In</button>
+                            <button type='button' onClick={() => login()} className='bg-green-500 py-3 px-10 w-full mt-10 text-black font-semibold rounded-3xl hover:scale-110 hover:font-bold'>
+                                {isLoading ? <i className="fa-solid fa-circle-notch animate-spin"></i> : <></>}
+                                {isLoading ? 'Logging In' : 'Log In'}
+                            </button>
                         </div>
                     </form>
 
@@ -75,7 +85,7 @@ export default function Login() {
                 </div>
             </div>
             <footer className='py-6 text-center bg-neutral-900' id='footer'>
-            <h1 className='text-zinc-400'>Developed by <span className="bg-gradient-to-r from-[#be22ff] via-[#ff279c] to-[#ff981f] text-transparent bg-clip-text text-lg font-semibold">Adarsh Vodnala</span>.</h1>
+                <h1 className='text-zinc-400'>Developed by <span className="bg-gradient-to-r from-[#be22ff] via-[#ff279c] to-[#ff981f] text-transparent bg-clip-text text-lg font-semibold">Adarsh Vodnala</span>.</h1>
             </footer>
         </div>
     )

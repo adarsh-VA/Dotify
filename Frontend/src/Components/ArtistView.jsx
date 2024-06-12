@@ -4,6 +4,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setArtistId, setPlayerSongs, setIsPlaying, setSongId, setPlaylistId } from '../store/reducers/playerSlice';
 import axios from 'axios';
 import { backendImageUrl, backendUrl, firebaseImgUrl } from '../constants';
+import { setLoading } from '../store/reducers/notificationSlice';
+import Loading from './Loading';
 
 export default function ArtistView() {
 
@@ -17,6 +19,7 @@ export default function ArtistView() {
     const imageRef = useRef();
     const [rgb, setRgb] = useState(null);
     const [rgba, setRgba] = useState(null);
+    const isLoading = useSelector((state) => state.notification.loading);
 
     function getAverageRGB(img) {
         var blockSize = 100,
@@ -63,6 +66,7 @@ export default function ArtistView() {
 
     useEffect(() => {
         if (user) {
+            dispatch(setLoading(true));
             axios.get(`${backendUrl}/artists/${artistId}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
@@ -70,6 +74,7 @@ export default function ArtistView() {
             })
                 .then((res) => {
                     setArtist(res.data);
+                    dispatch(setLoading(false));
                 })
         }
         else {
@@ -135,6 +140,10 @@ export default function ArtistView() {
     const bgColorStyle = {
         backgroundColor: `${rgba}`,
     };
+
+    if (isLoading) {
+        return (<Loading />);
+    }
 
     return (
         <>

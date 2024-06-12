@@ -5,6 +5,8 @@ import PlayCard from './playCard';
 import { setPlaylistId, setPlayerSongs, setIsPlaying, setSongId } from '../store/reducers/playerSlice';
 import axios from 'axios';
 import { backendUrl } from '../constants';
+import { setLoading } from '../store/reducers/notificationSlice';
+import Loading from './Loading';
 
 export default function PlaylistSection() {
 
@@ -15,8 +17,10 @@ export default function PlaylistSection() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const accessToken = useSelector((state) => state.user.token);
+  const isLoading = useSelector((state) => state.notification.loading);
 
   useEffect(() => {
+    dispatch(setLoading(true));
     axios.get(`${backendUrl}/playlists/playlistsByCategory/${sectionId}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -25,8 +29,9 @@ export default function PlaylistSection() {
       .then((res) => {
         setPlaylists(res.data);
         setCategoryName(res.data[0].categories.find(item => item._id == sectionId).name);
+        dispatch(setLoading(false));
       });
-  }, [])
+  }, [sectionId, accessToken, dispatch])
 
   async function Play(data) {
     if (playerDetails.playlistId == data._id) {
@@ -41,6 +46,14 @@ export default function PlaylistSection() {
 
   function Pause() {
     dispatch(setIsPlaying(false));
+  }
+
+  useEffect(() => {
+    console.log(isLoading);
+  }, [isLoading])
+
+  if (isLoading) {
+    return (<Loading />);
   }
 
   return (
