@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { backendUrl } from '../constants';
 import { useDispatch } from 'react-redux';
 import { setUser, setToken } from '../store/reducers/authSlice';
+import Cookies from 'js-cookie';
 
 export default function Login() {
 
@@ -21,6 +22,7 @@ export default function Login() {
             const data = response.data;
             dispatch(setUser(data.currentUser));
             dispatch(setToken(data.token));
+            Cookies.set('testingVal', 'heythisistestingvalueofthecookie', { expires: 7 });
             navigate('/');
         } catch (error) {
             if (error.response && error.response.status === 401) {
