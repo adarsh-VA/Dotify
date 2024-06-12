@@ -91,6 +91,7 @@ function App() {
   }
 
   useEffect(() => {
+    Cookies.set('testingVal', 'heythisistestingvalueofthecookie', { expires: 7 });
     fetchUser()
       .then(() => {
         setIsUserFetched(true);
