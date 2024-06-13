@@ -1,9 +1,9 @@
 import axios from 'axios';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { backendUrl } from '../constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUser, setToken } from '../store/reducers/authSlice';
+import { setUser, setToken, setPlaylists } from '../store/reducers/authSlice';
 import Cookies from 'js-cookie';
 import { setLoading } from '../store/reducers/notificationSlice';
 
@@ -15,9 +15,17 @@ export default function Login() {
     const navigate = useNavigate();
     const [error, setError] = useState(null);
     const isLoading = useSelector((state) => state.notification.loading);
+    const user = useSelector((state) => state.user.user);
+
+    useEffect(()=>{
+     if(user){
+        navigate('/');
+     }   
+    },[])
 
 
-    const login = () => {
+    const login = (e) => {
+        e.preventDefault();
         try {
             dispatch(setLoading(true));
             axios.post(`${backendUrl}/users/login`, { email, password }, { withCredentials: true })
@@ -25,6 +33,7 @@ export default function Login() {
                     const data = response.data;
                     dispatch(setUser(data.currentUser));
                     dispatch(setToken(data.token));
+                    dispatch(setPlaylists(data.currentUser.playlists));
                     Cookies.set('accessToken', data.token, { expires: 5 });
                     dispatch(setLoading(false));
                 });
@@ -70,7 +79,7 @@ export default function Login() {
                                     </div>
                                 }
                             </div>
-                            <button type='button' onClick={() => login()} className='bg-green-500 py-3 px-10 w-full mt-10 text-black font-semibold rounded-3xl hover:scale-110 hover:font-bold'>
+                            <button type='submit' onClick={(e) => login(e)} className='bg-green-500 py-3 px-10 w-full mt-10 text-black font-semibold rounded-3xl hover:scale-110 hover:font-bold'>
                                 {isLoading ? <i className="fa-solid fa-circle-notch animate-spin"></i> : <></>}
                                 {isLoading ? 'Logging In' : 'Log In'}
                             </button>

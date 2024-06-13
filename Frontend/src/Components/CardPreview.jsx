@@ -37,7 +37,7 @@ export default function CardPreview({ linkName, props }) {
             <div className='h-36 mb-3 shadow-[0px_4px_18px_-5px_rgb(0,0,0)]'>
                 {
                     props.image ?
-                        <img src={firebaseImgUrl(props.image)} alt="" className='w-full h-full rounded-md' />
+                        <img src={firebaseImgUrl(props.image)} alt="" className='w-full h-full rounded-md object-cover' />
                         :
                         <div className='w-full h-full rounded-md bg-zinc-800 flex justify-center items-center shadow-[0px_4px_18px_-5px_rgb(0,0,0)]'>
                             <i class="fa-solid fa-music text-zinc-500 text-7xl"></i>

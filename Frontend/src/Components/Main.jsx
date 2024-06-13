@@ -51,28 +51,33 @@ export default function Main() {
     };
 
     const createUserPlaylist = () => {
-        axios.post(
-            `${backendUrl}/playlists/createUserPlaylist`,
-            null,
-            {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            }
-        ).then((res) => {
-            axios.put(`${backendUrl}/users/addPlaylist/${user._id}`,
-                {
-                    playlistId: res.data._id
-                },
+        if(user){
+            axios.post(
+                `${backendUrl}/playlists/createUserPlaylist`,
+                null,
                 {
                     headers: {
-                        Authorization: `Bearer ${accessToken}`
-                    }
-                })
-                .then((res) => {
-                    dispatch(setPlaylists(res.data.playlists));
-                });
-        });
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            ).then((res) => {
+                axios.put(`${backendUrl}/users/addPlaylist/${user._id}`,
+                    {
+                        playlistId: res.data._id
+                    },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`
+                        }
+                    })
+                    .then((res) => {
+                        dispatch(setPlaylists(res.data.playlists));
+                    });
+            });
+        }
+        else{
+            navigate('/login');
+        }
     }
 
 
@@ -194,12 +199,12 @@ export default function Main() {
                                             <div className='bg-zinc-800 p-4 rounded-lg mb-5'>
                                                 <h1 className='font-bold mb-2'>Create your first platlist</h1>
                                                 <p className='text-sm'>It's easy, we'll help you</p>
-                                                <button className='bg-white text-black font-semibold p-1 px-3 mt-6 rounded-full hover:scale-105'>Create playlist</button>
+                                                <button onClick={()=>navigate('/login')} className='bg-white text-black font-semibold p-1 px-3 mt-6 rounded-full hover:scale-105'>Create playlist</button>
                                             </div>
                                             <div className='bg-zinc-800 p-4 rounded-lg mb-5'>
                                                 <h1 className='font-bold mb-2'>Let's find some podcasts to follow</h1>
                                                 <p className='text-sm'>We'll keep you updated on new episodes</p>
-                                                <button className='bg-white text-black font-semibold p-1 px-3 mt-6 rounded-full hover:scale-105'>Browse podcasts</button>
+                                                <button onClick={()=>navigate('/login')} className='bg-white text-black font-semibold p-1 px-3 mt-6 rounded-full hover:scale-105'>Browse podcasts</button>
                                             </div>
                                         </>
 
@@ -210,13 +215,13 @@ export default function Main() {
                         </div>
                         <div className='px-5' id='link-tab'>
                             <div className='user-links text-zinc-400 text-xs mb-5 flex flex-wrap'>
-                                <a href="">Legal</a>
-                                <a href="">Privacy Center</a>
-                                <a href="">Privacy policy</a>
-                                <a href="">Cookies</a>
-                                <a href="">About Ads</a>
-                                <a href="">Accessibility</a>
-                                <a href="">Cookies</a>
+                                <a>Legal</a>
+                                <a>Privacy Center</a>
+                                <a>Privacy policy</a>
+                                <a>Cookies</a>
+                                <a>About Ads</a>
+                                <a>Accessibility</a>
+                                <a>Cookies</a>
                             </div>
                             <div className='mb-5'>
                                 <button className='text-white font-bold border border-zinc-500 rounded-full py-1 px-3 hover:border-white hover:scale-105'> <i className="fa-solid fa-globe"></i> English</button>
@@ -292,9 +297,9 @@ export default function Main() {
                                         </div>
                                     </div>
                                     <div className='flex text-xl'>
-                                        <a href="https://www.instagram.com/aadi_v.a/" target='_blank' className='bg-zinc-800 h-10 w-10 rounded-full hover:bg-zinc-700 flex items-center justify-center mr-3'><i className="fa-brands fa-instagram"></i></a>
-                                        <a href="https://m.facebook.com/vodnala.adarsh/" target='_blank' className='bg-zinc-800 h-10 w-10 rounded-full hover:bg-zinc-700 flex items-center justify-center mr-3'><i className="fa-brands fa-facebook"></i></a>
-                                        <a href="https://www.youtube.com/@adarshvodnala4265" target='_blank' className='bg-zinc-800 h-10 w-10 rounded-full hover:bg-zinc-700 flex items-center justify-center'><i className="fa-brands fa-youtube"></i></a>
+                                        <a className='bg-zinc-800 h-10 w-10 rounded-full hover:bg-zinc-700 flex items-center justify-center mr-3'><i className="fa-brands fa-instagram"></i></a>
+                                        <a className='bg-zinc-800 h-10 w-10 rounded-full hover:bg-zinc-700 flex items-center justify-center mr-3'><i className="fa-brands fa-facebook"></i></a>
+                                        <a className='bg-zinc-800 h-10 w-10 rounded-full hover:bg-zinc-700 flex items-center justify-center'><i className="fa-brands fa-youtube"></i></a>
                                     </div>
                                 </div>
                                 <hr className="h-px border-0 bg-zinc-700"></hr>

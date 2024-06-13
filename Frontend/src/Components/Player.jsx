@@ -118,9 +118,9 @@ export default function Player({ user }) {
                 {
                     song &&
                     <>
-                        <img src={firebaseImgUrl(song.image)} alt="" className='w-14 h-14 rounded-md' />
+                        <Link to={`/songs/${song._id}`} ><img src={firebaseImgUrl(song.image)} alt="" className='w-14 h-14 rounded-md' /></Link>
                         <div className='flex flex-col ml-2'>
-                            <a href="#">{song.name}</a>
+                        <Link to={`/songs/${song._id}`} >{song.name}</Link>
                             <div>
                                 {
                                     song.artists.slice(0, 2).map((artist, idx) => (

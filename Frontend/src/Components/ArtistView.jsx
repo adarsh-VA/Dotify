@@ -80,7 +80,7 @@ export default function ArtistView() {
         else {
             navigate('/login');
         }
-    }, []);
+    }, [artistId]);
 
     useEffect(() => {
         if (artist) {
@@ -151,7 +151,7 @@ export default function ArtistView() {
                 artist &&
 
                 <div style={gradientStyle}>
-                    <div className='px-7 pt-44 pb-4 bg-cover bg-center' style={{ backgroundImage: `url(${backendImageUrl}/${artist.image})` }} ref={imageRef} crossOrigin='Anonymous'>
+                    <div className='px-7 pt-44 pb-4 bg-cover' style={{ backgroundImage: `url(${firebaseImgUrl(artist.image)}`, backgroundPositionY:'-100px'}} ref={imageRef} crossOrigin='Anonymous'>
                         <h1 className='text-white text-xl font-semibold pl-2'>Artist</h1>
                         <h1 className='text-white text-8xl font-semibold pb-2'>{artist.name}</h1>
                     </div>

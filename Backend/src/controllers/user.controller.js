@@ -20,7 +20,14 @@ const loginUser = async (req, res) => {
 
         const token = await user.generateAuthToken();
 
-        const currentUser = await User.findById(user._id).select("-password");
+        const currentUser = await User.findById(user._id).select("-password")    
+        .populate({
+            path: 'playlists',
+            populate: {
+              path: 'songs',
+              options: { sort: { name: 1 } }
+            }
+        });
 
         return res
         .status(200)

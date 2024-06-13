@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { backendUrl } from '../constants';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setUser, setToken } from '../store/reducers/authSlice';
 import Cookies from 'js-cookie';
 
@@ -16,7 +16,14 @@ export default function Register() {
     const [isRegisterButtonDisabled, setIsRegisterButtonDisabled] = useState(true);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const user = useSelector((state) => state.user.user);
 
+
+    useEffect(() => {
+        if (user) {
+            navigate('/');
+        }
+    }, [])
 
     function handleRegister() {
         axios.post(`${backendUrl}/users/register`,
@@ -30,7 +37,7 @@ export default function Register() {
         ).then((res) => {
             dispatch(setUser(res.data.user));
             dispatch(setToken(res.data.token));
-            Cookies.set('accessToken',res.data.token, { expires: 5 });
+            Cookies.set('accessToken', res.data.token, { expires: 5 });
             navigate('/');
         })
             .catch((error) => {
@@ -93,7 +100,7 @@ export default function Register() {
                                     </div>
                                 }
                             </div>
-                            <button  disabled={isRegisterButtonDisabled} onClick={handleRegister} type='button' className='bg-green-500 py-3 px-10 w-full mt-10 text-black font-semibold rounded-3xl hover:font-bold disabled:bg-opacity-50 disabled:cursor-not-allowed'>Register</button>
+                            <button disabled={isRegisterButtonDisabled} onClick={handleRegister} type='button' className='bg-green-500 py-3 px-10 w-full mt-10 text-black font-semibold rounded-3xl hover:font-bold disabled:bg-opacity-50 disabled:cursor-not-allowed'>Register</button>
                         </div>
                     </form>
                 </div>

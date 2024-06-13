@@ -77,6 +77,10 @@ export default function Search() {
           <span className="text-7xl font-bold bg-gradient-to-r from-[#be22ff] via-[#ff279c] to-[#ff981f] text-transparent bg-clip-text">What do you want to play?</span>
         </div>
         :
+        <></>
+      }
+      {
+        !user &&
         <div className='text-center mt-5'>
           <span className="text-7xl font-bold bg-gradient-to-r from-[#be22ff] via-[#ff279c] to-[#ff981f] text-transparent bg-clip-text">Please log In to search!</span>
         </div>
