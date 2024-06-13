@@ -5,7 +5,6 @@ import { backendUrl } from '../constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser, setToken, setPlaylists } from '../store/reducers/authSlice';
 import Cookies from 'js-cookie';
-import { setLoading } from '../store/reducers/notificationSlice';
 
 export default function Login() {
 
@@ -14,43 +13,42 @@ export default function Login() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [error, setError] = useState(null);
-    const isLoading = useSelector((state) => state.notification.loading);
+    const [isLoading, setLoading] = useState(false);
     const user = useSelector((state) => state.user.user);
 
-    useEffect(()=>{
-     if(user){
-        navigate('/');
-     }
-     else{
-        setTimeout(() => {
-            alert("For testing you can use 'user@gmail.com' & pswd:'user'");
-          }, 100);
-     }
-    },[])
+    useEffect(() => {
+        if (user) {
+            navigate('/');
+        }
+        else {
+            setTimeout(() => {
+                alert("For testing you can use 'user@gmail.com' & pswd:'user'");
+            }, 100);
+        }
+    }, [])
 
 
     const login = (e) => {
         e.preventDefault();
-        try {
-            dispatch(setLoading(true));
-            axios.post(`${backendUrl}/users/login`, { email, password }, { withCredentials: true })
-                .then((response) => {
-                    const data = response.data;
-                    dispatch(setUser(data.currentUser));
-                    dispatch(setToken(data.token));
-                    dispatch(setPlaylists(data.currentUser.playlists));
-                    Cookies.set('accessToken', data.token, { expires: 5 });
-                    dispatch(setLoading(false));
-                });
-
-            navigate('/');
-        } catch (error) {
-            if (error.response && error.response.status === 401) {
-                setError('Wrong email or password. Please try again.');
-            } else {
-                setError('An unexpected error occurred. Please try again later.');
-            }
-        }
+        setLoading(true);
+        axios.post(`${backendUrl}/users/login`, { email, password }, { withCredentials: true })
+            .then((response) => {
+                const data = response.data;
+                dispatch(setUser(data.currentUser));
+                dispatch(setToken(data.token));
+                dispatch(setPlaylists(data.currentUser.playlists));
+                Cookies.set('accessToken', data.token, { expires: 5 });
+                setLoading(false);
+                navigate('/');
+            })
+            .catch((error) => {
+                setLoading(false);
+                if (error.response && error.response.status === 401) {
+                    setError('Wrong email or password. Please try again.');
+                } else {
+                    setError('No User found!!');
+                }
+            });
     };
 
 
@@ -75,7 +73,7 @@ export default function Login() {
                                     <input type="password" onChange={(e) => setPassword(e.target.value)} id="password" placeholder='Password' name='password' className='bg-transparent text-white ring-1 ring-neutral-500 rounded-sm p-2 hover:ring-white transition' />
                                 </div>
                                 {error &&
-                                    <div className="bg-red-100 border border-red-400 flex text-red-700 px-4 py-2 items-center rounded" role="alert">
+                                    <div className="bg-red-100 border border-red-400 flex text-red-700 px-4 py-2 items-center justify-between rounded" role="alert">
                                         <strong className="font-bold">Error: </strong>
                                         <span className="block sm:inline"> {error}</span>
                                         <span className="mt-1">
