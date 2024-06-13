@@ -20,7 +20,12 @@ export default function Login() {
     useEffect(()=>{
      if(user){
         navigate('/');
-     }   
+     }
+     else{
+        setTimeout(() => {
+            alert("For testing you can use 'user@gmail.com' & pswd:'user'");
+          }, 100);
+     }
     },[])
 
 
