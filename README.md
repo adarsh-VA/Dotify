@@ -4,7 +4,9 @@
 
 A music app inspired by Spotify, featuring music search and playback, user authorization and authentication, and a interactive, user-friendly interface.
 
-**Deployed on Vercel:** https://dotify-va.vercel.app/
+**Deployed on Vercel:** https://dotify-va.vercel.app/  
+**Check out my full-stack projects at** [adarshvodnala.vercel.app](https://adarshvodnala.vercel.app)
+
 
 ## Features
 
